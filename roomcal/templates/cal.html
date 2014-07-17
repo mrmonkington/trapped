@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% regroup slots by day.year as year_list %}
+
+{% for year in year_list %}
+    <h3>
+    {{ year.grouper }}
+    </h3>
+    {% regroup year.list by day.month as month_list %}
+    {% for month in month_list %}
+		{{ month.list.0.day|date:"M" }}
+			{% for a in 0 %}{{ a }}{% endfor %}
+		<table>
+			{% regroup month.list by day|date:"W" as week_list %}
+			{% for week in week_list %}
+				{% regroup week.list by day.day as day_list %}
+				<tr>
+					{% for day in day_list %}
+						<td {% if day.list.0.day.date = today.date %}class="today"{% endif %}>{{ day.grouper }}</td>
+					{% endfor %}
+				</tr>
+			{% endfor %}
+		</table>
+    {% endfor %}
+{% endfor %}
+
+
+{% endblock content %}
